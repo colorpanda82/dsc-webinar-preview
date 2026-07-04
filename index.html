@@ -369,7 +369,12 @@
     box-shadow: 0 6px 18px rgba(0,0,0,0.28);
   }
   .call-tile img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .call-tile--wide { grid-column: 1 / -1; aspect-ratio: 16 / 9; }
+  /* Matches the source photo's actual aspect ratio (700x467, ~3:2) instead
+     of a generic 16:9 — client wanted the whole photo visible, not a crop.
+     16/9 forced object-fit:cover to crop top and bottom no matter what
+     object-position was set to; with the tile's ratio now equal to the
+     image's own ratio, cover has nothing to crop. */
+  .call-tile--wide { grid-column: 1 / -1; aspect-ratio: 700 / 467; }
   /* Glowing active-speaker ring, matching the reference's highlighted-tile
      treatment. First pass used a 28px blur that washed out into the card's
      dark padding as a muddy haze (confirmed by pixel-sampling the rendered
@@ -1234,9 +1239,17 @@
   .footer-contact .email-row { display: flex; align-items: center; gap: 8px; }
   .footer-contact a.email { color: var(--dsc-primary); font-size: var(--fs-caption); }
   .footer-social { display: flex; gap: 8px; }
+  /* Icons themselves stay 25x25 to match the live site's footer exactly,
+     but that's well under the ~44px comfortable tap-target guideline —
+     client request 2026-07-05. Padding expands the actual tappable area;
+     matching negative margin keeps the icon's own visual position and
+     spacing unchanged, so nothing looks different, it's just easier to hit. */
+  .footer-social a { display: flex; padding: 9px; margin: -9px; }
   .footer-social img { width: 25px; height: 25px; }
   .footer-legal { display: flex; gap: 14px; flex-wrap: wrap; font-size: var(--fs-caption); color: var(--dsc-primary); }
-  .footer-legal a { color: var(--dsc-primary); text-decoration: underline; }
+  /* Same tap-target expansion as .footer-social — small caption-size text
+     links otherwise sit well under a comfortable tap height. */
+  .footer-legal a { display: inline-block; color: var(--dsc-primary); text-decoration: underline; padding: 10px 4px; margin: -10px -4px; }
   .footer-copy { font-size: var(--fs-caption); color: var(--dsc-primary); }
 
   @media (max-width: 700px) {
