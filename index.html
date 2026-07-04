@@ -214,21 +214,37 @@
      sitting inset by the container's standard 20-40px padding like every
      other section's body copy does. */
   .hero .container { max-width: var(--container); padding-inline: 0; }
-  .hero-grid { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 56px; align-items: end; }
-  .hero-copy h1 { color: var(--dsc-primary-dark); margin-bottom: 18px; }
+  /* Split into three grid children (copy-top / call-window / copy-bottom)
+     instead of one .hero-copy block, specifically so mobile can reorder
+     the call-window mockup ahead of the event-card + button — client
+     request 2026-07-05: put the visual right under the headline/lead
+     instead of after the full text block. Desktop keeps the original
+     visual: copy-top and copy-bottom stacked in column 1, call-window
+     filling column 2 (align-items: end keeps its prior bottom alignment). */
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    grid-template-areas: "copytop callwindow" "copybottom callwindow";
+    gap: 56px;
+    align-items: end;
+  }
+  .hero-copy-top { grid-area: copytop; }
+  .call-window { grid-area: callwindow; }
+  .hero-copy-bottom { grid-area: copybottom; }
+  .hero-copy-top h1 { color: var(--dsc-primary-dark); margin-bottom: 18px; }
   /* Changed 2026-07-05 per reference image: a solid navy block behind white
      text (like a bold stamped/redacted-label treatment), replacing the
      earlier peach highlighter-swipe (which itself replaced a plain
      underline and an outline box, both rejected as too geometric). Text
      goes white since it now sits ON the block rather than beside it. */
-  .hero-copy h1 em {
+  .hero-copy-top h1 em {
     position: relative;
     z-index: 1;
     color: var(--dsc-white);
     font-style: normal;
     display: inline-block;
   }
-  .hero-copy h1 em::before {
+  .hero-copy-top h1 em::before {
     /* Tightened and tilted 2026-07-05: the first pass used generous padding
        and sat perfectly level, reading as a plain rounded rectangle rather
        than a stamped label. Tighter insets plus a slight rotation give it
@@ -244,7 +260,7 @@
     border-radius: 4px;
     transform: rotate(-3deg);
   }
-  .hero-copy .lead { margin: 0 0 22px; color: var(--dsc-text-muted); max-width: 46ch; line-height: 1.35; }
+  .hero-copy-top .lead { margin: 0 0 22px; color: var(--dsc-text-muted); max-width: 46ch; line-height: 1.35; }
   .event-card {
     display: flex;
     flex-wrap: wrap;
@@ -418,7 +434,16 @@
        the literal screen edge, unlike every other section. Restore normal
        padding here so mobile keeps the same margins as the rest of the page. */
     .hero .container { padding-inline: clamp(20px, 4vw, 40px); }
-    .hero-grid { grid-template-columns: 1fr; text-align: left; }
+    .hero-grid {
+      grid-template-columns: 1fr;
+      grid-template-areas: "copytop" "callwindow" "copybottom";
+      text-align: left;
+    }
+    /* Client request 2026-07-05: match the natural-width hero/seats pill
+       buttons to the form's own full-width "Save my seat" button — all
+       already share identical height/padding/font (measured 61.6px tall
+       everywhere), the only difference was width. */
+    .hero-copy-bottom .btn { width: 100%; }
     .call-window { justify-self: stretch; max-width: 400px; margin: 8px auto 0; }
     /* The two square gallery tiles are ~180px wide here, too narrow for a
        full "Dr. First Last" name at the desktop tag size without wrapping
@@ -750,7 +775,14 @@
     line-height: 1.3;
   }
   @media (max-width: 700px) {
-    .takeaway-list { grid-template-columns: 1fr; }
+    .takeaway-list {
+      grid-template-columns: 1fr;
+      /* Cancelling .container's padding-inline made sense for the 2-column
+         desktop grid, but on a single mobile column it puts the "01"-"05"
+         numerals and body text flush against the screen edges with zero
+         margin — client request 2026-07-05 to restore lateral padding here. */
+      margin-inline: 0;
+    }
     .takeaway-row { padding: 16px 0 18px; gap: 14px; }
     .takeaway-row--live { padding-bottom: 20px; }
   }
@@ -1090,7 +1122,9 @@
     .seats-copy-wrap { display: contents; }
     .seats-copy { order: 1; }
     .seats-medallion { order: 2; align-self: center; width: 156px; height: 156px; aspect-ratio: unset; }
-    .seats-cta { order: 3; }
+    /* Match the form's full-width button treatment — see .hero-copy-bottom
+       .btn for the same change and reasoning. */
+    .seats-cta { order: 3; width: 100%; }
     .seats-medallion-num { font-size: var(--fs-display-md); }
     .seats-copy p { max-width: none; }
   }
@@ -1239,18 +1273,10 @@
      below. All client copy unchanged; nothing relocated. -->
 <section class="section section-white hero">
   <div class="container hero-grid">
-    <div class="hero-copy">
+    <div class="hero-copy-top">
       <p class="eyebrow">A live DSC Alliance webinar</p>
       <h1>Meet the <em>Initiators</em> of the Movement</h1>
       <p class="lead">The people who walked out of the insurance system and built the replacement are getting on one call.</p>
-
-      <div class="event-card">
-        <div><strong>When</strong><span>Thursday, July 23, 2026<br>3:00 PM PT / 4:00 PM MT / 5:00 PM CT / 6:00 PM ET</span></div>
-        <div><strong>Where</strong><span>Live online. Register and we will send you the link.</span></div>
-        <div><strong>Cost</strong><span>Free. Recording to everyone who registers.</span></div>
-      </div>
-
-      <a href="#register" class="btn btn-navy">Save my seat</a>
     </div>
 
     <div class="call-window" aria-hidden="true">
@@ -1306,6 +1332,16 @@
           <span class="call-btn-label">Q&amp;A</span>
         </div>
       </div>
+    </div>
+
+    <div class="hero-copy-bottom">
+      <div class="event-card">
+        <div><strong>When</strong><span>Thursday, July 23, 2026<br>3:00 PM PT / 4:00 PM MT / 5:00 PM CT / 6:00 PM ET</span></div>
+        <div><strong>Where</strong><span>Live online. Register and we will send you the link.</span></div>
+        <div><strong>Cost</strong><span>Free. Recording to everyone who registers.</span></div>
+      </div>
+
+      <a href="#register" class="btn btn-navy">Save my seat</a>
     </div>
   </div>
 </section>
