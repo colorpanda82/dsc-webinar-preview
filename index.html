@@ -457,13 +457,9 @@
        on one line instead of looking cramped. */
     .call-name { font-size: var(--fs-micro); padding: 3px 7px; gap: 4px; white-space: nowrap; }
     .call-name svg { width: 10px; height: 10px; }
-    /* The control bar is decorative call-window chrome, not information —
-       drop it on mobile to buy back space before the Why section, since
-       the hero call-window otherwise eats close to a full viewport here.
-       Scoped to the hero specifically — the register section's own mini
-       call-card reuses .call-bar too and should keep its control row on
-       mobile, since that card doesn't have the hero's space pressure. */
-    .hero .call-bar { display: none; }
+    /* Restored 2026-07-05 per client request — mobile should match desktop
+       here. (Previously hidden to buy back vertical space before the Why
+       section; client preferred keeping the control bar visible instead.) */
   }
   @media (max-width: 620px) {
     .nav img { height: 56px; }
