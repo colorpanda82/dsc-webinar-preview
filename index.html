@@ -253,9 +253,19 @@
   .hero-grid {
     display: grid;
     grid-template-columns: 1.05fr 0.95fr;
+    grid-template-rows: auto auto;
     grid-template-areas: "copytop callwindow" "copybottom callwindow";
     gap: 56px;
-    align-items: end;
+    /* Changed from "end" to "start" 2026-07-06 (client: large blank gap
+       above the event-card, not reproducible in Chromium at any width —
+       likely a cross-browser difference in how the call-window's 2-row
+       span affects implicit row-track sizing). end pushes copybottom's
+       content to the BOTTOM of its row; if any engine gives that row
+       extra height to accommodate the spanning image, end creates exactly
+       this kind of gap above the content, while start never can. Explicit
+       grid-template-rows added for the same reason — makes row sizing
+       intent unambiguous instead of relying on implicit auto behavior. */
+    align-items: start;
   }
   .hero-copy-top { grid-area: copytop; }
   .call-window { grid-area: callwindow; }
@@ -287,10 +297,7 @@
     z-index: -1;
     background: var(--dsc-primary-dark);
     border-radius: 4px;
-    /* translateY added 2026-07-06 (client: "move the block down a bit") —
-       merged into the existing rotate transform since a second `transform`
-       declaration would have silently replaced it, not combined with it. */
-    transform: rotate(-3deg) translateY(5px);
+    transform: rotate(-3deg);
   }
   .hero-copy-top .lead { margin: 0 0 22px; color: var(--dsc-text-muted); max-width: 46ch; line-height: 1.35; }
   .event-card {
