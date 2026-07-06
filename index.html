@@ -268,7 +268,12 @@
     align-items: start;
   }
   .hero-copy-top { grid-area: copytop; }
-  .call-window { grid-area: callwindow; }
+  /* align-self:center here only (not align-items:center on the parent
+     grid) — client wants the call-window vertically centered against the
+     combined height of the text column beside it. Scoping it to just this
+     element, rather than the grid's align-items, keeps .hero-copy-bottom
+     on align-items:start, preserving the cross-browser gap fix above. */
+  .call-window { grid-area: callwindow; align-self: center; }
   .hero-copy-bottom { grid-area: copybottom; }
   .hero-copy-top h1 { color: var(--dsc-primary-dark); margin-bottom: 18px; }
   /* Changed 2026-07-05 per reference image: a solid navy block behind white
