@@ -1042,6 +1042,15 @@
      static mockup (the placeholder's dashed border + .ph-* field styling
      is gone — the iframe renders GHL's own form styling, not this page's). */
   .form-embed { background: var(--dsc-white); border-radius: 16px; overflow: hidden; }
+  /* Client caught this 2026-07-06: clicking into the form fires the
+     browser's default focus outline on the iframe, which draws as a
+     plain rectangle ignoring border-radius entirely — "funny corners"
+     cutting across the rounded container. Outlines never respect
+     border-radius by design; box-shadow does, so swap to that instead of
+     just stripping the focus indicator (removing it outright would hurt
+     keyboard-only users' ability to see where focus is). */
+  .form-embed:focus-within { outline: none; box-shadow: 0 0 0 3px rgba(0,64,99,0.35); }
+  .form-embed iframe:focus { outline: none; }
 
   .register-copy-top h2 { margin-bottom: 14px; }
   .register-copy-top .lead { margin-top: 0; line-height: 1.3; }
@@ -1739,4 +1748,3 @@
 
 </body>
 </html>
-<!-- redeploy retry 1783352762 -->
