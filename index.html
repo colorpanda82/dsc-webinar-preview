@@ -287,7 +287,10 @@
     z-index: -1;
     background: var(--dsc-primary-dark);
     border-radius: 4px;
-    transform: rotate(-3deg);
+    /* translateY added 2026-07-06 (client: "move the block down a bit") —
+       merged into the existing rotate transform since a second `transform`
+       declaration would have silently replaced it, not combined with it. */
+    transform: rotate(-3deg) translateY(5px);
   }
   .hero-copy-top .lead { margin: 0 0 22px; color: var(--dsc-text-muted); max-width: 46ch; line-height: 1.35; }
   .event-card {
@@ -1754,4 +1757,3 @@
 
 </body>
 </html>
-<!-- redeploy retry 1783340110 -->
