@@ -23,16 +23,17 @@
      "Custom Code" / HTML embed element on the go.dscalliance.org page,
      rather than assembled from native GHL elements — same approach as the
      footer clone. No JS dependency except the native <details> FAQ (zero-JS).
-  2. FORM PLACEHOLDER: the "Reserve your seat" section below is a static
-     mockup of the 8-field form spec from BUILD.md, NOT a working form.
-     Once the real "Webinar - Meet the Initiators - Jul 23" form exists in
-     GHL Form Builder, swap the whole .form-placeholder block for GHL's
-     form embed snippet.
-  3. IMAGES: diana-girnita.jpg and lara-briseno-kenney.jpg currently load
-     from a local relative uploads/ path (fine for local preview only).
-     Before this goes live in GHL, upload both files to the GHL Media
-     Library and swap the two <img src="uploads/..."> below for the
-     resulting public URLs — local relative paths will not resolve once
+  2. FORM: real GHL embed swapped in 2026-07-06 (form ID GN8BvGpO2eHa0g2MSMVB,
+     "Webinar - Meet the Initiators - Jul 23") — the .form-embed block, no
+     longer a static mockup. Note this pulls from api.leadconnectorhq.com,
+     so it will not render inside Claude's Artifact preview (CSP blocks
+     external iframes there) but works normally on GitHub Pages and in GHL.
+  3. IMAGES: diana-girnita-avatar.jpg, lara-briseno-kenney.jpg,
+     lara-briseno-kenney-avatar.jpg, lou-flaspohler.jpg, and tea-nguyen.jpg
+     all currently load from a local relative uploads/ path (fine for local
+     preview only). Before this goes live in GHL, upload all five files to
+     the GHL Media Library and swap every <img src="uploads/..."> below for
+     the resulting public URLs — local relative paths will not resolve once
      this is pasted into GHL. The DSC logo already uses a real hosted URL
      (same one used in the email header) so it needs no change.
   4. Dr. Lou Flaspohler's real photo landed 2026-07-03 (uploads/lou-flaspohler.jpg,
@@ -913,7 +914,7 @@
      block to fill the row and push only the reminder down within it. */
   .register-copy-bottom { grid-area: copybottom; align-self: stretch; display: flex; flex-direction: column; }
   .register-copy-bottom .register-reminder { margin-top: auto; }
-  .form-placeholder { grid-area: form; }
+  .form-embed { grid-area: form; }
   @media (max-width: 860px) {
     .register-grid {
       grid-template-columns: 1fr;
@@ -1037,38 +1038,10 @@
   }
   .register-reminder .r-val { font-size: var(--fs-sm); color: var(--dsc-primary); font-weight: 600; }
   .register-reminder .r-val span { display: block; color: var(--dsc-text-muted); font-weight: 500; }
-  .form-placeholder {
-    background: var(--dsc-white);
-    border: 2px dashed rgba(0,64,99,0.35);
-    border-radius: 16px;
-    padding: 28px;
-  }
-  .form-placeholder .dev-note {
-    display: block;
-    font-family: var(--font);
-    font-size: var(--fs-eyebrow);
-    font-weight: 600;
-    letter-spacing: 0.04em;
-    color: #9AA6B0;
-    margin-bottom: 14px;
-  }
-  .ph-field { margin-bottom: 14px; }
-  .ph-field label { display: block; font-size: var(--fs-caption); font-weight: 600; color: var(--dsc-text-muted); margin-bottom: 6px; }
-  .ph-field label .opt { font-weight: 500; text-transform: none; letter-spacing: 0; color: #7C8DA0; }
-  .ph-input, .ph-select, .ph-textarea {
-    width: 100%;
-    border: 1px solid #D6DEE5;
-    border-radius: 10px;
-    padding: 12px 14px;
-    background: #F7F9FB;
-    color: #9AA6B0;
-    font-family: var(--font);
-    font-size: var(--fs-sm);
-  }
-  .ph-textarea { min-height: 56px; resize: none; }
-  .ph-checkbox { display: flex; gap: 10px; align-items: flex-start; font-size: var(--fs-caption); color: var(--dsc-text-muted); margin-bottom: 18px; }
-  .ph-checkbox input { margin-top: 3px; }
-  .ph-note { font-size: var(--fs-eyebrow); color: #9AA6B0; text-align: center; margin-top: 12px; }
+  /* Real GHL form embed, swapped in 2026-07-06 for the .form-placeholder
+     static mockup (the placeholder's dashed border + .ph-* field styling
+     is gone — the iframe renders GHL's own form styling, not this page's). */
+  .form-embed { background: var(--dsc-white); border-radius: 16px; overflow: hidden; }
 
   .register-copy-top h2 { margin-bottom: 14px; }
   .register-copy-top .lead { margin-top: 0; line-height: 1.3; }
@@ -1668,30 +1641,27 @@
       </div>
     </div>
 
-    <!--
-      FORM PLACEHOLDER — static mockup only, per BUILD.md field spec.
-      Replace this entire .form-placeholder block with the GHL form embed
-      for "Webinar - Meet the Initiators - Jul 23" once it exists.
-    -->
-    <div class="form-placeholder" aria-hidden="true">
-      <span class="dev-note">FORM: WEBINAR - MEET THE INITIATORS - JUL 23 (PLACEHOLDER)</span>
-
-      <div class="ph-field"><label>First name</label><div class="ph-input">First name</div></div>
-      <div class="ph-field"><label>Last name</label><div class="ph-input">Last name</div></div>
-      <div class="ph-field"><label>Email</label><div class="ph-input">you@practice.com</div></div>
-      <div class="ph-field"><label>Specialty <span class="opt">(optional)</span></label><div class="ph-input">e.g. Rheumatology, Cardiology</div></div>
-      <div class="ph-field"><label>State <span class="opt">(optional)</span></label><div class="ph-select">Select the state you practice in</div></div>
-      <div class="ph-field"><label>Where are you with direct care? <span class="opt">(optional)</span></label><div class="ph-select">Just curious / Considering the leap / Already practicing</div></div>
-      <div class="ph-field"><label>One question for the initiators <span class="opt">(optional)</span></label><div class="ph-textarea">We'll answer as many as we can, live.</div></div>
-
-      <div class="ph-checkbox">
-        <input type="checkbox" disabled>
-        <span>Yes, keep me posted from the DSC Alliance.</span>
-      </div>
-
-      <a href="#" class="btn btn-navy" style="width:100%;" onclick="return false;" tabindex="-1">Save my seat</a>
-      <p class="ph-note">Static preview, not a working form yet</p>
+    <!-- Real GHL form embed for "Webinar - Meet the Initiators - Jul 23" (form ID GN8BvGpO2eHa0g2MSMVB), swapped in 2026-07-06. -->
+    <div class="form-embed">
+      <iframe
+        src="https://api.leadconnectorhq.com/widget/form/GN8BvGpO2eHa0g2MSMVB"
+        style="width:100%;height:853px;border:none;border-radius:16px"
+        id="inline-GN8BvGpO2eHa0g2MSMVB"
+        data-layout="{'id':'INLINE'}"
+        data-trigger-type="alwaysShow"
+        data-trigger-value=""
+        data-activation-type="alwaysActivated"
+        data-activation-value=""
+        data-deactivation-type="neverDeactivate"
+        data-deactivation-value=""
+        data-form-name="Webinar - Meet the Initiators - Jul 23"
+        data-height="853"
+        data-layout-iframe-id="inline-GN8BvGpO2eHa0g2MSMVB"
+        data-form-id="GN8BvGpO2eHa0g2MSMVB"
+        title="Webinar - Meet the Initiators - Jul 23"
+      ></iframe>
     </div>
+    <script src="https://link.msgsndr.com/js/form_embed.js"></script>
   </div>
 </section>
 
