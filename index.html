@@ -888,7 +888,16 @@
     gap: 56px;
   }
   .register-copy-top { grid-area: copytop; }
-  .register-copy-bottom { grid-area: copybottom; align-self: end; }
+  /* Fixed 2026-07-06: align-self:end was anchoring the WHOLE copy-bottom
+     block (call-card + trust caption + reminder) to the bottom of its grid
+     row as one unit, leaving a large empty gap above the call-card — client
+     wanted the card to sit right after the checklist instead. Only the
+     reminder block was ever meant to bottom-anchor (matching the original
+     pre-restructure behavior, when .register-copy was a single flex column
+     with just .register-reminder getting margin-top:auto). Stretch the
+     block to fill the row and push only the reminder down within it. */
+  .register-copy-bottom { grid-area: copybottom; align-self: stretch; display: flex; flex-direction: column; }
+  .register-copy-bottom .register-reminder { margin-top: auto; }
   .form-placeholder { grid-area: form; }
   @media (max-width: 860px) {
     .register-grid {
@@ -912,7 +921,10 @@
      card, so it actually fills the width/height of the gap instead of
      sitting as a small object floating beside a lot of blank space. */
   .register-callcard {
-    margin-top: 28px;
+    /* Reduced 2026-07-06 (was 28px) — client wanted the card closer to the
+       checklist above it. The grid's own 56px row-gap already provides
+       real separation between the checklist and this block. */
+    margin-top: 4px;
     background: var(--dsc-primary-dark);
     border-radius: 16px;
     padding: 14px;
@@ -1655,7 +1667,7 @@
       <div class="ph-field"><label>Specialty <span class="opt">(optional)</span></label><div class="ph-input">e.g. Rheumatology, Cardiology</div></div>
       <div class="ph-field"><label>State <span class="opt">(optional)</span></label><div class="ph-select">Select the state you practice in</div></div>
       <div class="ph-field"><label>Where are you with direct care? <span class="opt">(optional)</span></label><div class="ph-select">Just curious / Considering the leap / Already practicing</div></div>
-      <div class="ph-field"><label>One question for the founders <span class="opt">(optional)</span></label><div class="ph-textarea">We'll answer as many as we can, live.</div></div>
+      <div class="ph-field"><label>One question for the initiators <span class="opt">(optional)</span></label><div class="ph-textarea">We'll answer as many as we can, live.</div></div>
 
       <div class="ph-checkbox">
         <input type="checkbox" disabled>
@@ -1742,4 +1754,3 @@
 
 </body>
 </html>
-<!-- redeploy retry 1783339304 -->
